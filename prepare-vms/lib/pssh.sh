@@ -19,9 +19,10 @@ pssh() {
     export PSSH=$(which pssh || which parallel-ssh)
 
     case "$INFRACLASS" in
-        hetzner) LOGIN=root ;;
-        linode)  LOGIN=root ;;
-        *)       LOGIN=ubuntu ;;
+        hetzner)      LOGIN=root ;;
+        linode)       LOGIN=root ;;
+        digitalocean) LOGIN=root ;;
+        *)            LOGIN=ubuntu ;;
     esac
 
     $PSSH -h $HOSTFILE -l $LOGIN \

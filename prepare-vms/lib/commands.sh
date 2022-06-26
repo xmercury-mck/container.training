@@ -18,12 +18,12 @@ _cmd_help() {
 
 _cmd build "Build the Docker image to run this program in a container"
 _cmd_build() {
-    docker-compose build
+    docker compose build
 }
 
 _cmd wrap "Run this program in a container"
 _cmd_wrap() {
-    docker-compose run --rm workshopctl "$@"
+    docker compose run --rm workshopctl "$@"
 }
 
 _cmd cards "Generate ready-to-print cards for a group of VMs"
@@ -85,23 +85,22 @@ _cmd_createuser() {
 
     pssh "
     set -e
-    cd /home/$USER_LOGIN
-    sudo -u $USER_LOGIN mkdir -p .ssh
+    sudo -u $USER_LOGIN mkdir -p /home/$USER_LOGIN/.ssh
     if i_am_first_node; then
       # Generate a key pair with an empty passphrase.
-      if ! sudo -u $USER_LOGIN [ -f .ssh/id_rsa ]; then
-        sudo -u $USER_LOGIN ssh-keygen -t rsa -f .ssh/id_rsa -P ''
-        sudo -u $USER_LOGIN cp .ssh/id_rsa.pub .ssh/authorized_keys
+      if ! sudo -u $USER_LOGIN [ -f /home/$USER_LOGIN/.ssh/id_rsa ]; then
+        sudo -u $USER_LOGIN ssh-keygen -t rsa -f /home/$USER_LOGIN/.ssh/id_rsa -P ''
+        sudo -u $USER_LOGIN cp /home/$USER_LOGIN/.ssh/id_rsa.pub /home/$USER_LOGIN/.ssh/authorized_keys
       fi
+      
     fi
     "
 
     pssh "
     set -e
-    cd /home/$USER_LOGIN
     if ! i_am_first_node; then
       # Copy keys from the first node.
-      ssh $SSHOPTS \$(cat /etc/name_of_first_node) sudo -u $USER_LOGIN tar -C /home/$USER_LOGIN -cvf- .ssh |
+      ssh $SSHOPTS \$(cat /etc/name_of_first_node) sudo -u $USER_LOGIN tar -C /home/$USER_LOGIN -cvf- /home/$USER_LOGIN/.ssh |
       sudo -u $USER_LOGIN tar -xf-
     fi
     "
@@ -189,7 +188,7 @@ _cmd_clusterize() {
     pssh -I tee /tmp/settings.yaml <tags/$TAG/settings.yaml
     pssh "
     sudo apt-get update &&
-    sudo apt-get install -y python-yaml"
+    sudo apt-get install -y python3-yaml"
 
     # If there is no "python" binary, symlink to python3
     pssh "
@@ -238,22 +237,30 @@ _cmd_docker() {
       sudo mkdir -p /mnt/docker
       sudo ln -sfn /mnt/docker /var/lib/docker
     fi
+    "
 
-    # containerd 1.6 breaks Weave.
-    # See https://github.com/containerd/containerd/issues/6921
-    sudo tee /etc/apt/preferences.d/containerd <<EOF
-Package: containerd.io
-Pin: version 1.5.*
-Pin-Priority: 1000
-EOF
-
-    # This will install the latest Docker.
-    sudo apt-get -qy install apt-transport-https ca-certificates curl software-properties-common
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    sudo add-apt-repository 'deb https://download.docker.com/linux/ubuntu bionic stable'
+    # This will install the latest Docker and Compose plugin.
+    pssh "
+    set -e
+    sudo apt-get -qy install apt-transport-https ca-certificates curl software-properties-common gnupg lsb-release
+    if ! [ -f /etc/apt/keyrings/docker.gpg ]; then
+        sudo mkdir -p /etc/apt/keyrings
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    fi
+    if ! [ -f /etc/apt/sources.list.d/docker.list ]; then
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+          $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    fi
     sudo apt-get -q update
-    sudo apt-get -qy install docker-ce
+    "
 
+    pssh "
+    set -e
+    sudo apt-get -qy install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+    "
+    
+    pssh "
+    set -e
     # Add registry mirror configuration.
     if ! [ -f /etc/docker/daemon.json ]; then
         echo '{\"registry-mirrors\": [\"https://mirror.gcr.io\"]}' | sudo tee /etc/docker/daemon.json
@@ -261,30 +268,6 @@ EOF
     fi
     "
 
-    ##VERSION## https://github.com/docker/compose/releases
-    if [ "$ARCHITECTURE" ]; then
-        COMPOSE_VERSION=v2.2.3
-        COMPOSE_PLATFORM='linux-$(uname -m)'
-    else
-        COMPOSE_VERSION=1.29.2
-        COMPOSE_PLATFORM='Linux-$(uname -m)'
-    fi
-    pssh "
-    set -e
-    ### Install docker-compose.
-    sudo curl -fsSL -o /usr/local/bin/docker-compose \
-      https://github.com/docker/compose/releases/download/$COMPOSE_VERSION/docker-compose-$COMPOSE_PLATFORM
-    sudo chmod +x /usr/local/bin/docker-compose
-    docker-compose version
-
-    ### Install docker-machine.
-    ##VERSION## https://github.com/docker/machine/releases
-    MACHINE_VERSION=v0.16.2
-    sudo curl -fsSL -o /usr/local/bin/docker-machine \
-      https://github.com/docker/machine/releases/download/\$MACHINE_VERSION/docker-machine-\$(uname -s)-\$(uname -m)
-    sudo chmod +x /usr/local/bin/docker-machine
-    docker-machine version
-    "
 }
 
 _cmd kubebins "Install Kubernetes and CNI binaries but don't start anything"
@@ -1017,6 +1000,7 @@ _cmd_passwords() {
     $0 ips "$TAG" | paste "$PASSWORDS_FILE" - | while read password nodes; do
         info "Setting password for $nodes..."
         for node in $nodes; do
+            # FIXME: make user a env for clouds with no ubuntu user
             echo docker:$password | ssh $SSHOPTS ubuntu@$node sudo chpasswd
         done
     done
@@ -1151,6 +1135,7 @@ test_tag() {
 test_vm() {
     ip=$1
     info "Testing instance with IP address $ip."
+    # FIXME: make user a var based on cloud
     user=ubuntu
     errors=""
 
@@ -1162,8 +1147,6 @@ test_vm() {
         "cat /etc/hosts" \
         "hostnamectl status" \
         "docker version | grep Version -B1" \
-        "docker-compose version" \
-        "docker-machine version" \
         "docker images" \
         "docker ps" \
         "curl --silent localhost:55555" \
