@@ -34,6 +34,7 @@ content:
   - containers/Cmd_And_Entrypoint.md
   - containers/Copying_Files_During_Build.md
   - containers/Exercise_Dockerfile_Basic.md
+  - next.md
 - # DAY 2
   - containers/Container_Networking_Basics.md
   - containers/Local_Development_Workflow.md
