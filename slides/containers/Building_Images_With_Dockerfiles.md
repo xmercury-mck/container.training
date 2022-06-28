@@ -428,41 +428,5 @@ IMAGE         CREATED            CREATED BY                     SIZE
   * passes all arguments without extra processing
   * doesn't create an extra process
   * doesn't require `/bin/sh` to exist in the container
+  * **Typically only used for CMD at end of Dockerfile**
 
----
-
-## Pro-tip: the `exec` shell built-in
-
-POSIX shells have a built-in command named `exec`.
-
-`exec` should be followed by a program and its arguments.
-
-From a user perspective:
-
-- it looks like the shell exits right away after the command execution,
-
-- in fact, the shell exits just *before* command execution;
-
-- or rather, the shell gets *replaced* by the command.
-
----
-
-## Example using `exec`
-
-```dockerfile
-CMD exec figlet -f script hello
-```
-
-In this example, `sh -c` will still be used, but
-`figlet` will be PID 1 in the container.
-
-The shell gets replaced by `figlet` when `figlet` starts execution.
-
-This allows to run processes as PID 1 without using JSON.
-
-???
-
-:EN:- Towards automated, reproducible builds
-:EN:- Writing our first Dockerfile
-:FR:- Rendre le processus automatique et reproductible
-:FR:- Écrire son premier Dockerfile

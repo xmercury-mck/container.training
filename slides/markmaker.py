@@ -143,7 +143,7 @@ def generatefromyaml(manifest, filename):
     # Process @@LINK[file] and @@INCLUDE[file] directives
     local_anchor_path = ".."
     # FIXME use dynamic repo and branch?
-    online_anchor_path = "https://github.com/jpetazzo/container.training/tree/master"
+    online_anchor_path = "https://github.com/jpetazzo/container.training/tree/main"
     for atatlink in re.findall(r"@@LINK\[[^]]*\]", html):
         logging.debug("Processing {}".format(atatlink))
         file_name = atatlink[len("@@LINK["):-1]
@@ -231,6 +231,7 @@ try:
     else:
         repo = subprocess.check_output(["git", "config", "remote.origin.url"]).decode("ascii")
     repo = repo.strip().replace("git@github.com:", "https://github.com/")
+    repo = repo.strip().replace(".git", "")
     if "BRANCH" in os.environ:
         branch = os.environ["BRANCH"]
     else:

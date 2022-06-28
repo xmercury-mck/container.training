@@ -1,4 +1,3 @@
-version: "2"
 
 services:
   www:
@@ -13,4 +12,3 @@ services:
     - ..:/repo
     working_dir: /repo/slides
     command: ./build.sh forever
-
