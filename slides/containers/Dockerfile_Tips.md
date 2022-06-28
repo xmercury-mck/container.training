@@ -1,3 +1,5 @@
+name: bonus
+
 # Tips for efficient Dockerfiles
 
 We will see how to:
