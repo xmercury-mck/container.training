@@ -2,13 +2,15 @@
 
 1. Open these slides: https://chicago.bretfisher.com/
 
-1. Get a server: I provisioned each of you your own. *Someone* has a spreadsheet of IPs.
+1. Get a server: I provisioned each of you your own. Teams has a spreadsheet of IPs. Pick one and add your initials.
 
-1. Access your server over SSH or WebSSH (HTTP port 1080)
+1. Access your server over SSH or WebSSH (http://w.x.y.z:8080)
 
    - username: docker  |  password: training
 
-## Note:
+1. Let me know if you can't get in, we have multiple backup options!
+
+**Note**
 
 - This is hands on. You'll want to do most of these commands with me.
 
@@ -72,10 +74,10 @@
 
 - I make bestselling Docker & Kubernetes courses on Udemy (nearly 300,000 students).
 
-- **As part of this workshop, you get lifetime access to all four of them!**
+- **As part of this workshop, you get free lifetime access to all of them!**
 
-- **But you must "buy" each course with the free coupon before it expires.**
+- **But you must "buy" each course with the coupon before the coupon expires.**
 
-- Use the coupon code `CHICAGO` to get the courses [in this list](https://www.udemy.com/user/bretfisher/).
+- Use the coupon code `CHICAGO22` to get the courses [in this list](https://www.udemy.com/user/bretfisher/).
 
-- Details will be emailed out to you as a reminder at the end of this worksop.
+- Details will be emailed out to you as a reminder at the end of this workshop.

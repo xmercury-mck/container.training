@@ -258,7 +258,13 @@ _cmd_docker() {
     set -e
     sudo apt-get -qy install docker-ce docker-ce-cli containerd.io docker-compose-plugin
     "
-    
+
+    # set buildx as default builder. uninstall with docker buildx uninstall. avoid with DOCKER_BUILDKIT=0
+    pssh "
+    set -e
+    sudo docker buildx install
+    "
+
     pssh "
     set -e
     # Add registry mirror configuration.
@@ -1071,7 +1077,7 @@ WantedBy=multi-user.target
 
 [Service]
 WorkingDirectory=/opt/webssh
-ExecStart=/usr/bin/env python run.py --fbidhttp=false --port=1080 --policy=reject
+ExecStart=/usr/bin/env python run.py --fbidhttp=false --port=8080 --policy=reject
 User=nobody
 Group=nogroup
 Restart=always
