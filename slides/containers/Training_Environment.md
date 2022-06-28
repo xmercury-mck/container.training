@@ -21,23 +21,6 @@ class: title
 
   - use https://www.play-with-docker.com/ to instantly get a training environment
 
----
-
-## Connecting to your Virtual Machine
-
-Open up WebSSH to your VM in your favorite browser: http://A.B.C.D:1080
-
-WebSSH is running on port 1080, which is more firewall friendly than port 22.
-
-If you know your firewall has port 22 open, you can always
-
-* On OS X, Linux, and other UNIX systems, just use `ssh`:
-
-```bash
-$ ssh <login>@<ip-address>
-```
-
-* On Windows, you may have `ssh` already, or use WSL.
 
 ---
 

@@ -50,7 +50,7 @@
 
 <!--
 .lab[
-```open https://@@GITREPO@@/tree/master/slides/common/about-slides.md```
+```open https://@@GITREPO@@/tree/main/slides/common/about-slides.md```
 ]
 -->
 

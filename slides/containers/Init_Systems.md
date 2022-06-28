@@ -72,7 +72,7 @@ class: extra-details
 
 - If we need to run multiple processes: can we use multiple containers?
 
-  (Example: [this Compose file](https://github.com/jpetazzo/container.training/blob/master/compose/simple-k8s-control-plane/docker-compose.yaml) runs multiple processes together.)
+  (Example: [this Compose file](https://github.com/bretfisher/container.training/blob/main/compose/simple-k8s-control-plane/docker-compose.yaml) runs multiple processes together.)
 
 - When deploying with Kubernetes:
 

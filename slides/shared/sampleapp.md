@@ -100,7 +100,7 @@ and displays aggregated logs.
 
 - These 5 services are visible in the application's Compose file,
   [docker-compose.yml](
-  https://@@GITREPO@@/blob/master/dockercoins/docker-compose.yml)
+  https://@@GITREPO@@/blob/main/dockercoins/docker-compose.yml)
 
 ---
 
@@ -191,11 +191,11 @@ class: extra-details
   <br/>https://@@GITREPO@@
 
 - The application is in the [dockercoins](
-  https://@@GITREPO@@/tree/master/dockercoins)
+  https://@@GITREPO@@/tree/main/dockercoins)
   subdirectory
 
 - The Compose file ([docker-compose.yml](
-  https://@@GITREPO@@/blob/master/dockercoins/docker-compose.yml))
+  https://@@GITREPO@@/blob/main/dockercoins/docker-compose.yml))
   lists all 5 services
 
 - `redis` is using an official image from the Docker Hub
@@ -204,8 +204,8 @@ class: extra-details
 
 - Each service's Dockerfile and source code is in its own directory
 
-  (`hasher` is in the [hasher](https://@@GITREPO@@/blob/master/dockercoins/hasher/) directory,
-  `rng` is in the [rng](https://@@GITREPO@@/blob/master/dockercoins/rng/)
+  (`hasher` is in the [hasher](https://@@GITREPO@@/blob/main/dockercoins/hasher/) directory,
+  `rng` is in the [rng](https://@@GITREPO@@/blob/main/dockercoins/rng/)
   directory, etc.)
 
 ---

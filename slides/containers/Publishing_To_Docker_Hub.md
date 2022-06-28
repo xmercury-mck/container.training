@@ -45,7 +45,7 @@ servers, it will store your credentials in `~/.docker/config`.]
 
 --
 
-* `jpetazzo/clock` is, in fact, `index.docker.io/jpetazzo/clock`
+* `bretfisher/clock` is, in fact, `index.docker.io/bretfisher/clock`
 
 * `ubuntu` is, in fact, `library/ubuntu`, i.e. `index.docker.io/library/ubuntu`
 
@@ -55,19 +55,19 @@ servers, it will store your credentials in `~/.docker/config`.]
 
 * Let's tag our `figlet` image (or any other to our liking):
   ```bash
-  docker tag figlet jpetazzo/figlet
+  docker tag figlet bretfisher/figlet
   ```
 
 * And push it to the Hub:
   ```bash
-  docker push jpetazzo/figlet
+  docker push bretfisher/figlet
   ```
 
 * That's it!
 
 --
 
-* Anybody can now `docker run jpetazzo/figlet` anywhere.
+* Anybody can now `docker run bretfisher/figlet` anywhere.
 
 ---
 
@@ -90,7 +90,7 @@ class: extra-details
 ## Setting up an automated build
 
 * We need a Dockerized repository!
-* Let's go to https://github.com/jpetazzo/trainingwheels and fork it.
+* Let's go to https://github.com/bretfisher/trainingwheels and fork it.
 * Go to the Docker Hub (https://hub.docker.com/) and sign-in. Select "Repositories" in the blue navigation menu.
 * Select "Create" in the top-right bar, and select "Create Repository+".
 * Connect your Docker Hub account to your GitHub account.

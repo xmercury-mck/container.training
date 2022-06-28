@@ -367,7 +367,7 @@ In practice, we often need to enable specific behaviors in development (e.g. deb
 
 One way to reconcile both needs is to use Compose to enable these behaviors.
 
-Let's look at the [trainingwheels](https://github.com/jpetazzo/trainingwheels) demo app for an example.
+Let's look at the [trainingwheels](https://github.com/bretfisher/trainingwheels) demo app for an example.
 
 ---
 
@@ -386,7 +386,7 @@ CMD gunicorn --bind 0.0.0.0:5000 --workers 10 counter:app
 EXPOSE 5000
 ```
 
-(Source: [trainingwheels Dockerfile](https://github.com/jpetazzo/trainingwheels/blob/master/www/Dockerfile))
+(Source: [trainingwheels Dockerfile](https://github.com/bretfisher/trainingwheels/blob/master/www/Dockerfile))
 
 ---
 
@@ -416,7 +416,7 @@ services:
 ```
 ]
 
-(Source: [trainingwheels Compose file](https://github.com/jpetazzo/trainingwheels/blob/master/docker-compose.yml))
+(Source: [trainingwheels Compose file](https://github.com/bretfisher/trainingwheels/blob/master/docker-compose.yml))
 
 ---
 

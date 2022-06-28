@@ -28,6 +28,10 @@
   - Move that image around with registries
   - Run that image anywhere in a container
 
+- I wrote a big article around this with lots of details. Bookmark for later!
+
+  - [Kubernetes vs. Docker](https://www.bretfisher.com/kubernetes-vs-docker/)
+
 ---
 
 ## What *is* Docker Inc., the company?

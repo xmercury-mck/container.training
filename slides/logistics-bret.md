@@ -2,9 +2,9 @@
 
 1. Open these slides: https://chicago.bretfisher.com/
 
-1. Get a server: I provisioned each of you your own. Teams has a spreadsheet of IPs. Pick one and add your initials.
+1. Get a server: I provisioned one for each. Teams has a spreadsheet of IPs. Pick one, copy the IP and add your initials.
 
-1. Access your server over SSH or WebSSH (http://w.x.y.z:8080)
+1. Access your server over SSH (likely blocked) or WebSSH (http://w.x.y.z:8080)
 
    - username: docker  |  password: training
 
@@ -56,7 +56,7 @@
 
 ## Exercises
 
-- At the end of each day, there is a series of exercises.
+- At the end of each day, there is an exercise.
 
 - To make the most out of the training, please try the exercises!
 
