@@ -40,12 +40,12 @@ content:
   - containers/Container_Network_Model.md
   - containers/Compose_For_Dev_Stacks.md
   - containers/Exercise_Composefile.md
-  - containers/Exercise_Dockerfile_Advanced.md
 - # EXTRA
   - |
     # (Extra Docker content)
   - containers/Dockerfile_Tips.md
   - containers/Multi_Stage_Builds.md
+  - containers/Exercise_Dockerfile_Advanced.md
   - containers/Getting_Inside.md
   - containers/Start_And_Attach.md
   - containers/Naming_And_Inspecting.md
