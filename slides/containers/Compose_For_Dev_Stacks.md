@@ -204,24 +204,28 @@ A Compose file has multiple sections:
 
 ---
 
+class: extra-details
+
 ## The History of Compose file versions
 
 * Until 2020, Compose files has a `version: x.x` key/value in each file.
 
 * The version in the file controlled what features were supported, and it was confusing.
 
-* The last version was 3.9, so you might see `version: 3.9` in an old `docker-compose.yml`.
+* The last version was 3.9, so you might see `version: 3.x` in old `docker-compose.yml`.
 
 * Now, the `docker compose` CLI, and [other tools], follow the [Compose Spec].
 
-* All features are now supported in every file and no version is required!
+* **All features are now supported in every file and no version is required!**
 
+.small[
 * If using Docker Swarm, `version: 3.9` is still required. It doesn't support Compose Spec.
 
 * Note, this isn't related to tool versions, like `docker compose version`.
 
 The [Docker documentation](https://docs.docker.com/compose/compose-file/)
 has excellent information about the Compose file format if you need to know more about versions.
+]
 
 [other tools]: https://github.com/compose-spec/compose-spec#implementations
 [Compose Spec]: https://github.com/compose-spec/compose-spec/blob/master/spec.md
