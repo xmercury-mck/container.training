@@ -29,7 +29,7 @@ content:
   - containers/First_Containers.md
   - containers/Background_Containers.md
   - containers/Initial_Images.md
-  - containers/Building_Images_Interactively.md
+  #- containers/Building_Images_Interactively.md
   - containers/Building_Images_With_Dockerfiles.md
   - containers/Cmd_And_Entrypoint.md
   - containers/Copying_Files_During_Build.md
@@ -37,8 +37,8 @@ content:
   - next.md
 - # DAY 2
   - containers/Container_Networking_Basics.md
-  - containers/Local_Development_Workflow.md
   - containers/Container_Network_Model.md
+  - containers/Local_Development_Workflow.md
   - containers/Compose_For_Dev_Stacks.md
   - containers/Exercise_Composefile.md
 - # EXTRA
