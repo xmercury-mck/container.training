@@ -100,8 +100,8 @@ _cmd_createuser() {
     set -e
     if ! i_am_first_node; then
       # Copy keys from the first node.
-      ssh $SSHOPTS \$(cat /etc/name_of_first_node) sudo -u $USER_LOGIN tar -C /home/$USER_LOGIN -cvf- /home/$USER_LOGIN/.ssh |
-      sudo -u $USER_LOGIN tar -xf-
+      ssh $SSHOPTS \$(cat /etc/name_of_first_node) sudo -u $USER_LOGIN tar -C /home/$USER_LOGIN -cvf- .ssh |
+      sudo -u $USER_LOGIN tar -C /home/$USER_LOGIN -xf-
     fi
     "
 
@@ -240,27 +240,33 @@ _cmd_docker() {
     "
 
     # This will install the latest Docker and Compose plugin.
-    pssh "
-    set -e
-    sudo apt-get -qy install apt-transport-https ca-certificates curl software-properties-common gnupg lsb-release
-    if ! [ -f /etc/apt/keyrings/docker.gpg ]; then
-        sudo mkdir -p /etc/apt/keyrings
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-    fi
-    if ! [ -f /etc/apt/sources.list.d/docker.list ]; then
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-          $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    fi
-    sudo apt-get -q update
-    "
+    # pssh -i "
+    # set -e
+    # sudo apt-get -qy install apt-transport-https ca-certificates curl software-properties-common gnupg lsb-release
+    # if ! [ -f /etc/apt/keyrings/docker.gpg ]; then
+    #     sudo mkdir -p /etc/apt/keyrings
+    #     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    # fi
+    # if ! [ -f /etc/apt/sources.list.d/docker.list ]; then
+    #     export RELEASE=\$(lsb_release -cs)
+    #     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+    #       $RELEASE stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    # fi
+    # sudo apt-get -q update
+    # "
 
-    pssh "
+    # pssh -i "
+    # set -e
+    # sudo apt-get -qy install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+    # "
+
+    pssh -i "
     set -e
-    sudo apt-get -qy install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+    curl -fsSL get.docker.com -o get-docker.sh && sudo sh get-docker.sh
     "
 
     # set buildx as default builder. uninstall with docker buildx uninstall. avoid with DOCKER_BUILDKIT=0
-    pssh "
+    pssh -i "
     set -e
     sudo docker buildx install
     "
@@ -327,12 +333,12 @@ EOF"
     fi
 
     # Install packages
-    pssh --timeout 200 "
+    pssh --timeout 200 -i "
     curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg |
     sudo apt-key add - &&
     echo deb http://apt.kubernetes.io/ kubernetes-xenial main |
     sudo tee /etc/apt/sources.list.d/kubernetes.list"
-    pssh --timeout 200 "
+    pssh --timeout 200 -i "
     sudo apt-get update -q &&
     sudo apt-get install -qy kubelet kubeadm kubectl &&
     sudo apt-mark hold kubelet kubeadm kubectl
@@ -348,27 +354,27 @@ EOF"
     fi
 
     # Re-enable CRI interface in containerd
-    pssh "
+    pssh -i "
     echo '# Use default parameters for containerd.' | sudo tee /etc/containerd/config.toml
     sudo systemctl restart containerd"
 
     # Initialize kube control plane
-    pssh --timeout 200 "
+    pssh --timeout 200 -i "
     if i_am_first_node && [ ! -f /etc/kubernetes/admin.conf ]; then
         kubeadm token generate > /tmp/token &&
         cat >/tmp/kubeadm-config.yaml <<EOF
 kind: InitConfiguration
-apiVersion: kubeadm.k8s.io/v1beta2
+apiVersion: kubeadm.k8s.io/v1beta3
 bootstrapTokens:
 - token: \$(cat /tmp/token)
 nodeRegistration:
   # Comment out the next line to switch back to Docker.
-  criSocket: /run/containerd/containerd.sock
+  criSocket: unix:///run/containerd/containerd.sock
   ignorePreflightErrors:
   - NumCPU
 ---
 kind: JoinConfiguration
-apiVersion: kubeadm.k8s.io/v1beta2
+apiVersion: kubeadm.k8s.io/v1beta3
 discovery:
   bootstrapToken:
     apiServerEndpoint: \$(cat /etc/name_of_first_node):6443
@@ -376,18 +382,19 @@ discovery:
     unsafeSkipCAVerification: true
 nodeRegistration:
   # Comment out the next line to switch back to Docker.
-  criSocket: /run/containerd/containerd.sock
+  criSocket: unix:///run/containerd/containerd.sock
   ignorePreflightErrors:
   - NumCPU
 ---
 kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
+cgroupDriver: systemd
 # The following line is necessary when using Docker.
 # It doesn't seem necessary when using containerd.
 #cgroupDriver: cgroupfs
 ---
 kind: ClusterConfiguration
-apiVersion: kubeadm.k8s.io/v1beta2
+apiVersion: kubeadm.k8s.io/v1beta3
 apiServer:
   certSANs:
   - \$(cat /tmp/ipv4)
@@ -396,7 +403,7 @@ EOF
     fi"
 
     # Put kubeconfig in ubuntu's and $USER_LOGIN's accounts
-    pssh "
+    pssh -i "
     if i_am_first_node; then
         sudo mkdir -p \$HOME/.kube /home/$USER_LOGIN/.kube &&
         sudo cp /etc/kubernetes/admin.conf \$HOME/.kube/config &&
@@ -406,14 +413,14 @@ EOF
     fi"
 
     # Install weave as the pod network
-    pssh "
+    pssh -i "
     if i_am_first_node; then
         kubever=\$(kubectl version | base64 | tr -d '\n') &&
         kubectl apply -f https://cloud.weave.works/k8s/net?k8s-version=\$kubever
     fi"
 
     # Join the other nodes to the cluster
-    pssh --timeout 200 "
+    pssh --timeout 200 -i "
     if ! i_am_first_node && [ ! -f /etc/kubernetes/kubelet.conf ]; then
         FIRSTNODE=\$(cat /etc/name_of_first_node) &&
         ssh $SSHOPTS \$FIRSTNODE cat /tmp/kubeadm-config.yaml > /tmp/kubeadm-config.yaml &&
@@ -421,7 +428,7 @@ EOF
     fi"
 
     # Install metrics server
-    pssh "
+    pssh -i "
     if i_am_first_node; then
 	kubectl apply -f https://raw.githubusercontent.com/jpetazzo/container.training/master/k8s/metrics-server.yaml
     #helm upgrade --install metrics-server \
@@ -483,13 +490,13 @@ EOF
 
     # Install stern
     ##VERSION## https://github.com/stern/stern/releases
-    STERN_VERSION=1.20.1
+    STERN_VERSION=1.21.0
     FILENAME=stern_${STERN_VERSION}_linux_${ARCH}
     URL=https://github.com/stern/stern/releases/download/v$STERN_VERSION/$FILENAME.tar.gz
     pssh "
     if [ ! -x /usr/local/bin/stern ]; then
         curl -fsSL $URL |
-        sudo tar -C /usr/local/bin -zx --strip-components=1 $FILENAME/stern
+        sudo tar -C /usr/local/bin -zx stern
         sudo chmod +x /usr/local/bin/stern
         stern --completion bash | sudo tee /etc/bash_completion.d/stern
         stern --version
