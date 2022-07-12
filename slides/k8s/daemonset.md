@@ -1,3 +1,5 @@
+name: bonus
+
 # Daemon sets
 
 - We want to scale `rng` in a way that is different from how we scaled `worker`

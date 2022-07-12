@@ -1,3 +1,5 @@
+name: part2
+
 # Deploying with YAML
 
 - So far, we created resources with the following commands:
