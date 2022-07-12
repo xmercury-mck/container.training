@@ -21,8 +21,6 @@ content:
 #- shared/chat-room-zoom-webinar.md
 - shared/toc.md
 - # DAY 3
-  - |
-    # Kubernetes
   #- shared/connecting.md
   #- shared/webssh.md
   #- k8s/versions-k8s.md
@@ -48,21 +46,21 @@ content:
   - k8s/declarative.md
   - k8s/deploymentslideshow.md
   - k8s/authoring-yaml.md
-  - k8s/scalingdockercoins.md
-  - shared/hastyconclusions.md
-  - k8s/daemonset.md
+  #- k8s/scalingdockercoins.md
+  #- shared/hastyconclusions.md
   - k8s/rollout.md
   - k8s/healthchecks.md
-  - k8s/setup-devel.md
-  - k8s/localkubeconfig.md
   #- k8s/access-eks-cluster.md
-  - k8s/accessinternal.md
   #- k8s/kubectlproxy.md
-  - exercises/localcluster-details.md
+  #- exercises/localcluster-details.md
+  - k8s/volumes.md
+  - k8s/configuration.md
+  - k8s/secrets.md
   - shared/thankyou.md
 - # EXTRA
   - |
     # (Extra Kubernetes content)
+  - k8s/daemonset.md
   - k8s/volumes.md
   - k8s/configuration.md
   - k8s/secrets.md
@@ -71,10 +69,16 @@ content:
   - k8s/helm-chart-format.md
   - k8s/helm-create-basic-chart.md
   - k8s/helm-create-better-chart.md
+- # EXTRA
+  - |
+    # (Even More Extra Kubernetes content)
   - k8s/labels-annotations.md
   - k8s/kubectl-logs.md
   - k8s/logs-cli.md
   - k8s/batch-jobs.md
+  - k8s/setup-devel.md
+  - k8s/localkubeconfig.md
+  - k8s/accessinternal.md
   - k8s/netpol.md
   - k8s/authn-authz.md
   - k8s/statefulsets.md
