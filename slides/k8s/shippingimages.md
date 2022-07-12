@@ -90,24 +90,6 @@
 
   (when it has one)
 
----
-
-## Building on the fly
-
-- Conceptually, it is possible to build images on the fly from a repository
-
-- Example: [ctr.run](https://ctr.run/)
-
-  (deprecated in August 2020, after being aquired by Datadog)
-
-- It did allow something like this:
-  ```bash
-  docker run ctr.run/github.com/jpetazzo/container.training/dockercoins/hasher
-  ```
-
-- No alternative yet
-
-  (free startup idea, anyone?)
 
 ???
 
