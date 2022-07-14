@@ -38,9 +38,10 @@ content:
   - k8s/buildshiprun-dockerhub.md
   #- exercises/k8sfundamentals-details.md
   - k8s/ourapponkube.md
-  - k8s/namespaces.md
   - next-k8s.md
 - # DAY 4
+  - logistics-bret-k8s.md
+  - k8s/namespaces.md
   - k8s/yamldeploy.md
   - shared/declarative.md
   - k8s/declarative.md
