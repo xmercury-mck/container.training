@@ -1,3 +1,5 @@
+name: part2
+
 # Namespaces
 
 - We would like to deploy another copy of DockerCoins on our cluster
