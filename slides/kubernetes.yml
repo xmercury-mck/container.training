@@ -41,6 +41,7 @@ content:
   - next-k8s.md
 - # DAY 4
   - logistics-bret-k8s.md
+  - part4-where-we-left-off.md
   - k8s/namespaces.md
   - k8s/yamldeploy.md
   - shared/declarative.md
