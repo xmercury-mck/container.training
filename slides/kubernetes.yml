@@ -63,9 +63,6 @@ content:
   - |
     # (Extra Kubernetes content)
   - k8s/daemonset.md
-  - k8s/volumes.md
-  - k8s/configuration.md
-  - k8s/secrets.md
   - k8s/resource-limits.md
   - k8s/helm-intro.md
   - k8s/helm-chart-format.md
