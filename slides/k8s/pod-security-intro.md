@@ -122,17 +122,15 @@
 
 ---
 
-## Admission plugins
+## Built-in admission plugins
 
 - [PodSecurityPolicy](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) (will be removed in Kubernetes 1.25)
 
-  - create PodSecurityPolicy resources
+  - Legacy, since K8s 1.0, pre "Admission Controllers" API
 
-  - create Role that can `use` a PodSecurityPolicy
+  - Commonly used, but removed when 1.25 ships in August 2022
 
-  - create RoleBinding that grants the Role to a user or ServiceAccount
-
-- [PodSecurityAdmission](https://kubernetes.io/docs/concepts/security/pod-security-admission/) (alpha since Kubernetes 1.22)
+- [PodSecurityAdmission](https://kubernetes.io/docs/concepts/security/pod-security-admission/) (beta since Kubernetes 1.23)
 
   - use pre-defined policies (privileged, baseline, restricted)
 
@@ -150,21 +148,44 @@
 
 - Examples:
 
-  [Kubewarden](https://www.kubewarden.io/)
+  [Kubewarden](https://www.kubewarden.io/) (uses Wasm-based policies)
 
-  [Kyverno](https://kyverno.io/policies/pod-security/)
+  [Kyverno](https://kyverno.io/policies/pod-security/) (uses simple YAML K8s resources)
 
-  [OPA Gatekeeper](https://github.com/open-policy-agent/gatekeeper)
+  [OPA Gatekeeper](https://github.com/open-policy-agent/gatekeeper) (uses Rego language for policies)
 
-- Pros: available today; very flexible and customizable
+- Pros: available today; very flexible and customizable; superset of PodSecurityAdmission
 
-- Cons: performance and reliability of external webhook
+- Cons: performance and reliability of external webhook (minor usually)
 
 ---
 
-## Acronym salad
+## My policy preferences for the real world
 
-- PSP = Pod Security Policy
+- [Kyverno][1] (and their SaaS [Nirmata][2]) is the most mature and flexible solution
+
+- It's a CNCF incubating project, meaning it's ready for production, stable, and popular
+
+- It only requires using YAML, unlike others, and way more flexible than the built-in PSA
+
+- It's friendly at the CLI, failing gracefully and explaining why you didn't meet the policy
+
+- Like all Admission Controllers, it's harder to troubleshoot when `apply` is automated
+
+- I had the founder demo it on my stream, checkout the [video][3] or [podcast][4]
+
+- We should still probably know the basics of PSA, since thats built-in
+
+[1]:https://kyverno.io/policies/pod-security/
+[2]:https://nirmata.com/
+[3]:https://youtu.be/4uabd0GkqdY?t=357
+[4]:https://podcast.bretfisher.com/episodes/kubernetes-policy-management-with-kyverno-and-nirmata
+
+---
+
+## Acronym salad for built-in features
+
+- PSP = Pod Security Policy (legacy)
 
   - an admission plugin called PodSecurityPolicy
 
@@ -172,11 +193,13 @@
 
 - PSA = Pod Security Admission
 
-  - an admission plugin called PodSecurity, enforcing PSS
+  - an admission controller called `PodSecurity`, enforcing PSS below
+
+  - the successor to the legacy PSP
 
 - PSS = Pod Security Standards
 
-  - a set of 3 policies (privileged, baseline, restricted)\
+  - a set of 3 policies (privileged, baseline, restricted)
 
 ???
 

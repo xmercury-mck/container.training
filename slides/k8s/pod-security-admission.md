@@ -2,7 +2,9 @@
 
 - "New" policies
 
-  (available in alpha since Kubernetes 1.22)
+  (available in alpha since Kubernetes 1.22, beta in 1.23)
+
+  (By the way, 1.24 is latest version as of July 2022)
 
 - Easier to use
 
@@ -30,27 +32,26 @@
 
 ---
 
-## Pod Security Standards
+## Pod Security Standards (each adds capabilities to the last)
 
-- `privileged`
+- `restricted` (hard mode. Make this the goal for all your apps)
 
-  - can do everything
+  - limits volumes to configMap, emptyDir, ephemeral, secret, PVC
+  - containers can't run as root, only capability is NET_BIND_SERVICE
+  - includes `baseline` (can't do privileged pods, hostPath, hostNetwork...)
 
-- `baseline`
+- `baseline` (easier mode to start with)
 
   - disables hostNetwork, hostPID, hostIPC, hostPorts, hostPath volumes
   - limits which SELinux/AppArmor profiles can be used
   - containers can still run as root and use most capabilities
 
-- `restricted`
+- `privileged` (admin mode)
 
-  - limits volumes to configMap, emptyDir, ephemeral, secret, PVC
-  - containers can't run as root, only capability is NET_BIND_SERVICE
-  - `baseline` (can't do privileged pods, hostPath, hostNetwork...)
+  - can do everything
+  - equivalent to not enabling PSS for a namespace
 
 ---
-
-class: extra-details
 
 ## Why `baseline` ≠ `restricted` ?
 
@@ -68,45 +69,13 @@ class: extra-details
 
 ## PSA in practice
 
-- Step 1: enable the PodSecurity admission plugin
+- Step 1: enable the PodSecurity admission plugin (auto-enabled as beta in 1.23)
 
-- Step 2: label some Namespaces
+- Step 2: label a Namespace for which of policy to warn, audit, and/or enforce
 
-- Step 3: provide an AdmissionConfiguration (optional)
+- Step 3: provide an AdmissionConfiguration to set defaults and exemptions (optional)
 
 - Step 4: profit!
-
----
-
-## Enabling PodSecurity
-
-- This requires Kubernetes 1.22 or later
- 
-- This requires the ability to reconfigure the API server
-
-- The following slides assume that we're using `kubeadm`
-
-  (and have write access to `/etc/kubernetes/manifests`)
-
----
-
-## Reconfiguring the API server
-
-- In Kubernetes 1.22, we need to enable the `PodSecurity` feature gate
-
-- In later versions, this might be enabled automatically
-
-.lab[
-
-- Edit `/etc/kubernetes/manifests/kube-apiserver.yaml`
-
-- In the `command` list, add `--feature-gates=PodSecurity=true`
-
-- Save, quit, wait for the API server to be back up again
-
-]
-
-Note: for bonus points, edit the `kubeadm-config` ConfigMap instead!
 
 ---
 

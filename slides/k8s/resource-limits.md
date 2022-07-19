@@ -299,7 +299,7 @@ This is what the spec of a Pod with resources will look like:
 ```yaml
 containers:
 - name: httpenv
-  image: jpetazzo/httpenv
+  image: bretfisher/httpenv
   resources:
     limits:
       memory: "100Mi"
