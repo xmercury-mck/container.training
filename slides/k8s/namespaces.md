@@ -196,7 +196,7 @@
 
 ## Using our new namespace
 
-- Let's check that we are in our new namespace, then deploy a new copy of Dockercoins
+- Let's check that we are in our new namespace
 
 .lab[
 
@@ -209,47 +209,17 @@
 
 ---
 
-## Deploying DockerCoins with YAML files
+## Deploying another instance of DockerCoins
 
-- The GitHub repository `jpetazzo/kubercoins` contains everything we need!
+- We *could* type all our kubectl commands to deploy DockerCoins again
 
-.lab[
+- Remember, since it's a different namespace, the resource names can be the same
 
-- Clone the kubercoins repository:
-  ```bash
-  cd ~
-  git clone https://github.com/jpetazzo/kubercoins
-  ```
+- DNS names inside the app are the same
 
-- Create all the DockerCoins resources:
-  ```bash
-  kubectl create -f kubercoins
-  ```
+- Kubernetes would give us new NodePort ports to access this 2nd instance
 
-]
-
-If the argument behind `-f` is a directory, all the files in that directory are processed. 
-
-The subdirectories are *not* processed, unless we also add the `-R` flag.
-
----
-
-## Viewing the deployed app
-
-- Let's see if this worked correctly!
-
-.lab[
-
-- Retrieve the port number allocated to the `webui` service:
-  ```bash
-  kubectl get svc webui
-  ```
-
-- Point our browser to http://X.X.X.X:3xxxx
-
-]
-
-If the graph shows up but stays at zero, give it a minute or two!
+- We can run many copies of the same app without any app changes!
 
 ---
 
@@ -261,11 +231,23 @@ If the graph shows up but stays at zero, give it a minute or two!
 
 - A pod in the `default` namespace can communicate with a pod in the `kube-system` namespace
 
-- CoreDNS uses a different subdomain for each namespace
-
 - Example: from any pod in the cluster, you can connect to the Kubernetes API with:
 
   `https://kubernetes.default.svc.cluster.local:443/`
+
+---
+
+## DNS search suffixes in Kubernetes
+
+- CoreDNS, by default, gives services the FQDN:
+
+  -  `<service>.<namespace>.svc.cluster.local`
+
+- Kubernetes also sets up search suffixes so it's easy to resolve names
+
+- If you're in the same namespace, you only need to use `<service>` for DNS lookups
+
+- To get to a service in the `blue` namespace from `green` namespace: `<service>.blue`
 
 ---
 
@@ -300,70 +282,6 @@ If the graph shows up but stays at zero, give it a minute or two!
 
 Note: we could have used `--namespace=default` for the same result.
 
----
-
-## Switching namespaces more easily
-
-- We can also use a little helper tool called `kubens`:
-
-  ```bash
-  # Switch to namespace foo
-  kubens foo
-  # Switch back to the previous namespace
-  kubens -
-  ```
-
-- On our clusters, `kubens` is called `kns` instead
-
-  (so that it's even fewer keystrokes to switch namespaces)
-
----
-
-##  `kubens` and `kubectx`
-
-- With `kubens`, we can switch quickly between namespaces
-
-- With `kubectx`, we can switch quickly between contexts
-
-- Both tools are simple shell scripts available from https://github.com/ahmetb/kubectx
-
-- On our clusters, they are installed as `kns` and `kctx`
-
-  (for brevity and to avoid completion clashes between `kubectx` and `kubectl`)
-
----
-
-## `kube-ps1`
-
-- It's easy to lose track of our current cluster / context / namespace
-
-- `kube-ps1` makes it easy to track these, by showing them in our shell prompt
-
-- It is installed on our training clusters, and when using [shpod](https://github.com/jpetazzo/shpod)
-
-- It gives us a prompt looking like this one:
-  ```
-  [123.45.67.89] `(kubernetes-admin@kubernetes:default)` docker@node1 ~
-  ```
-  (The highlighted part is `context:namespace`, managed by `kube-ps1`)
-
-- Highly recommended if you work across multiple contexts or namespaces!
-
----
-
-## Installing `kube-ps1`
-
-- It's a simple shell script available from https://github.com/jonmosco/kube-ps1
-
-- It needs to be [installed in our profile/rc files](https://github.com/jonmosco/kube-ps1#installing)
-
-  (instructions differ depending on platform, shell, etc.)
-
-- Once installed, it defines aliases called `kube_ps1`, `kubeon`, `kubeoff`
-
-  (to selectively enable/disable it when needed)
-
-- Pro-tip: install it on your machine during the next break!
 
 ???
 

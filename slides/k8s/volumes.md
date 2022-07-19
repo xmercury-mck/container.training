@@ -258,6 +258,8 @@ spec:
 
 ---
 
+class: extra-details
+
 ## Trying the shared volume
 
 - This one will be time-sensitive!
@@ -281,6 +283,8 @@ spec:
 ]
 
 ---
+
+class: extra-details
 
 ## Shared volume in action
 
@@ -315,6 +319,8 @@ The first time, we should see "403 Forbidden".
 The second time, we should see the HTML file from the Spoon-Knife repository.
 
 ---
+
+class: extra-details
 
 ## Explanations
 

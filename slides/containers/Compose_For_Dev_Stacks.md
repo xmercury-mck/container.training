@@ -218,14 +218,14 @@ class: extra-details
 
 * **All features are now supported in every file and no version is required!**
 
-.small[
-* If using Docker Swarm, `version: 3.9` is still required. It doesn't support Compose Spec.
+.footnote[.small[
+If using Docker Swarm, `version: 3.9` is still required. It doesn't support Compose Spec.
 
-* Note, this isn't related to tool versions, like `docker compose version`.
+Note, this isn't related to tool versions, like `docker compose version`.
 
 The [Docker documentation](https://docs.docker.com/compose/compose-file/)
 has excellent information about the Compose file format if you need to know more about versions.
-]
+]]
 
 [other tools]: https://github.com/compose-spec/compose-spec#implementations
 [Compose Spec]: https://github.com/compose-spec/compose-spec/blob/master/spec.md

@@ -80,6 +80,8 @@
 
 ---
 
+class: extra-details
+
 ## `args` or `command`?
 
 - Use `command` to override the `ENTRYPOINT` defined in the image
@@ -493,6 +495,8 @@ Here is @@LINK[k8s/haproxy.yaml], a Pod manifest using that ConfigMap:
 
 ---
 
+class: extra-details
+
 ## Exposing configmaps with the downward API
 
 - We are going to run a Docker registry on a custom port
@@ -506,6 +510,8 @@ Here is @@LINK[k8s/haproxy.yaml], a Pod manifest using that ConfigMap:
 - Then we will expose that configmap as a container environment variable
 
 ---
+
+class: extra-details
 
 ## Creating the configmap
 
@@ -525,6 +531,8 @@ Here is @@LINK[k8s/haproxy.yaml], a Pod manifest using that ConfigMap:
 
 ---
 
+class: extra-details
+
 ## Using the configmap
 
 We are going to use the following pod definition:
@@ -534,6 +542,8 @@ We are going to use the following pod definition:
 ```
 
 ---
+
+class: extra-details
 
 ## Using the configmap
 

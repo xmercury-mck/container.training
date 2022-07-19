@@ -12,31 +12,6 @@
 
 ---
 
-class: extra-details
-
-## If you're running Kubernetes 1.17 (or older)...
-
-- This material assumes that you're running a recent version of Kubernetes
-
-  (at least 1.19) <!-- ##VERSION## -->
-
-- You can check your version number with `kubectl version`
-
-  (look at the server part)
-
-- In Kubernetes 1.17 and older, `kubectl run` creates a Deployment
-
-- If you're running such an old version:
-
-  - it's obsolete and no longer maintained
-
-  - Kubernetes 1.17 is [EOL since January 2021][nonactive]
-
-  - **upgrade NOW!**
-
-[nonactive]: https://kubernetes.io/releases/patch-releases/#non-active-branch-history
-
----
 
 ## Starting a simple pod with `kubectl run`
 
@@ -206,7 +181,7 @@ class: extra-details
 
 - The `--` is used to separate:
 
-  - "options/flags of `kubectl create`
+  - options/flags of `kubectl create`
 
   - command to run in the container
 

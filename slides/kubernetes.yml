@@ -9,10 +9,11 @@ slides: https://chicago.bretfisher.com/
 
 exclude:
 - self-paced
+- extra-details
 
 content:
 - shared/title.md
-- logistics-bret.md
+- logistics-bret-k8s.md
 # - containers/intro.md
 - shared/about-slides.md
 # - shared/chat-room-im.md
@@ -20,9 +21,7 @@ content:
 #- shared/chat-room-zoom-webinar.md
 - shared/toc.md
 - # DAY 3
-  - |
-    # Kubernetes
-  - shared/connecting.md
+  #- shared/connecting.md
   #- shared/webssh.md
   #- k8s/versions-k8s.md
   - shared/sampleapp.md
@@ -37,43 +36,48 @@ content:
   - k8s/shippingimages.md
   #- k8s/buildshiprun-selfhosted.md
   - k8s/buildshiprun-dockerhub.md
-  - exercises/k8sfundamentals-details.md
+  #- exercises/k8sfundamentals-details.md
   - k8s/ourapponkube.md
+  - next-k8s.md
 - # DAY 4
-  - k8s/labels-annotations.md
-  - k8s/kubectl-logs.md
-  - k8s/logs-cli.md
+  - logistics-bret-k8s.md
+  - part4-where-we-left-off.md
   - k8s/namespaces.md
   - k8s/yamldeploy.md
   - shared/declarative.md
   - k8s/declarative.md
   - k8s/deploymentslideshow.md
   - k8s/authoring-yaml.md
-  - k8s/scalingdockercoins.md
-  - shared/hastyconclusions.md
-  - k8s/daemonset.md
-  - k8s/setup-devel.md
-  - k8s/localkubeconfig.md
-  #- k8s/access-eks-cluster.md
-  - k8s/accessinternal.md
-  #- k8s/kubectlproxy.md
-  - exercises/localcluster-details.md
-- # DAY 5
+  #- k8s/scalingdockercoins.md
+  #- shared/hastyconclusions.md
   - k8s/rollout.md
   - k8s/healthchecks.md
+  #- k8s/access-eks-cluster.md
+  #- k8s/kubectlproxy.md
+  #- exercises/localcluster-details.md
   - k8s/volumes.md
   - k8s/configuration.md
   - k8s/secrets.md
+  - shared/thankyou.md
+- # EXTRA
+  - |
+    # (Extra Kubernetes content)
+  - k8s/daemonset.md
   - k8s/resource-limits.md
   - k8s/helm-intro.md
   - k8s/helm-chart-format.md
   - k8s/helm-create-basic-chart.md
   - k8s/helm-create-better-chart.md
-  - shared/thankyou.md
 - # EXTRA
   - |
-    # (Extra Kubernetes content)
+    # (Even More Extra Kubernetes content)
+  - k8s/labels-annotations.md
+  - k8s/kubectl-logs.md
+  - k8s/logs-cli.md
   - k8s/batch-jobs.md
+  - k8s/setup-devel.md
+  - k8s/localkubeconfig.md
+  - k8s/accessinternal.md
   - k8s/netpol.md
   - k8s/authn-authz.md
   - k8s/statefulsets.md

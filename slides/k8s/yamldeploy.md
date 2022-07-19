@@ -70,6 +70,28 @@
 
 ---
 
+## Remember our dockercoins application?
+
+- The dockercoins app is made of 5 services:
+
+  - `rng` = web service generating random bytes
+
+  - `hasher` = web service computing hash of POSTed data
+
+  - `worker` = background process calling `rng` and `hasher`
+
+  - `webui` = web interface to watch progress
+
+  - `redis` = data store (holds a counter updated by `worker`)
+
+---
+
+class: pic
+
+![Diagram showing the 5 containers of the applications](images/dockercoins-diagram.png)
+
+---
+
 ## Deploying dockercoins with YAML
 
 - We provide a YAML manifest with all the resources for Dockercoins

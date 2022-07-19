@@ -125,29 +125,18 @@ class: pic
 
 ---
 
-## Credits
-
-- The first schema is a Kubernetes cluster with storage backed by multi-path iSCSI
-
-  (Courtesy of [Yongbok Kim](https://www.yongbok.net/blog/))
-
-- The second one is a simplified representation of a Kubernetes cluster
-
-  (Courtesy of [Imesh Gunaratne](https://medium.com/containermind/a-reference-architecture-for-deploying-wso2-middleware-on-kubernetes-d4dee7601e8e))
-
----
 
 ## Kubernetes architecture: the nodes
 
 - The nodes executing our containers run a collection of services:
 
-  - a container Engine (typically Docker)
+  - a container Engine (typically Docker or containerd)
 
   - kubelet (the "node agent")
 
-  - kube-proxy (a necessary but not sufficient network component)
+  - kube-proxy (the "network agent")
 
-- Nodes were formerly called "minions"
+- Nodes, also called "worker nodes" were formerly called "minions"
 
   (You might see that word in older articles or documentation)
 
@@ -165,7 +154,7 @@ class: pic
 
 - Together, these services form the control plane of our cluster
 
-- The control plane is also called the "master"
+- The control plane was previously called the "master"
 
 ---
 
@@ -173,50 +162,6 @@ class: pic
 
 ![One of the best Kubernetes architecture diagrams available](images/k8s-arch4-thanks-luxas.png)
 
----
-
-class: extra-details
-
-## Running the control plane on special nodes
-
-- It is common to reserve a dedicated node for the control plane
-
-  (Except for single-node development clusters, like when using minikube)
-
-- This node is then called a "master"
-
-  (Yes, this is ambiguous: is the "master" a node, or the whole control plane?)
-
-- Normal applications are restricted from running on this node
-
-  (By using a mechanism called ["taints"](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/))
-
-- When high availability is required, each service of the control plane must be resilient
-
-- The control plane is then replicated on multiple nodes
-
-  (This is sometimes called a "multi-master" setup)
-
----
-
-class: extra-details
-
-## Running the control plane outside containers
-
-- The services of the control plane can run in or out of containers
-
-- For instance: since `etcd` is a critical service, some people
-  deploy it directly on a dedicated cluster (without containers)
-
-  (This is illustrated on the first "super complicated" schema)
-
-- In some hosted Kubernetes offerings (e.g. AKS, GKE, EKS), the control plane is invisible
-
-  (We only "see" a Kubernetes API endpoint)
-
-- In that case, there is no "master node"
-
-*For this reason, it is more accurate to say "control plane" rather than "master."*
 
 ---
 
@@ -281,17 +226,19 @@ class: extra-details
 
 class: extra-details
 
-## Do we need to run Docker at all?
+## Do we need to run Docker at all in Kubernetes?
 
 No!
 
 --
 
-- By default, Kubernetes uses the Docker Engine to run containers
+- Docker actually runs containers with "containerd", which is built by Docker
+
+- Docker Engine has more features than Kubernetes needs, and containerd is lighter
+
+- By default, Kubernetes uses containerd to run containers
 
 - We can leverage other pluggable runtimes through the *Container Runtime Interface*
-
-- <del>We could also use `rkt` ("Rocket") from CoreOS</del> (deprecated)
 
 ---
 
@@ -317,25 +264,21 @@ class: extra-details
 
 class: extra-details
 
-## Do we need to run Docker at all?
+## Do we need to run Docker at all in Kubernetes?
 
-Yes!
+Sometimes!
 
 --
 
-- In this workshop, we run our app on a single node first
+- Docker CLI/Engine are now focused on local development workflows
 
-- We will need to build images and ship them around
+- Docker Engine = Human friendly CLI
+  
+- containerd & CRI-O = Machine friendly, ideal for controlling from Kubernetes
 
-- We can do these things without Docker
-  <br/>
-  (and get diagnosed with NIH¹ syndrome)
+- Kubernetes doesn't build images or support `docker compose`
 
-- Docker is still the most stable container engine today
-  <br/>
-  (but other options are maturing very quickly)
-
-.footnote[¹[Not Invented Here](https://en.wikipedia.org/wiki/Not_invented_here)]
+- You might see Docker Engine used to support building images in Kubernetes
 
 ---
 
@@ -349,9 +292,7 @@ class: extra-details
 
 - On our production servers:
 
-  *Yes (today)*
-
-  *Probably not (in the future)*
+  *Probably not*
 
 .footnote[More information about CRI [on the Kubernetes blog](https://kubernetes.io/blog/2016/12/container-runtime-interface-cri-in-kubernetes)]
 
@@ -420,22 +361,6 @@ class: pic
     <br/>(incurring more latency, lower performance)
 
 - Both scenarios can make sense, depending on our goals
-
----
-
-## Credits
-
-- The first diagram is courtesy of Lucas Käldström, in [this presentation](https://speakerdeck.com/luxas/kubeadm-cluster-creation-internals-from-self-hosting-to-upgradability-and-ha)
-
-  - it's one of the best Kubernetes architecture diagrams available!
-
-- The second diagram is courtesy of Weave Works
-
-  - a *pod* can have multiple containers working together
-
-  - IP addresses are associated with *pods*, not with individual containers
-
-Both diagrams used with permission.
 
 ???
 
