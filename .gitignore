@@ -26,6 +26,7 @@ node_modules
 .DS_Store
 .AppleDouble
 .LSOverride
+.dccache
 
 ### Windows ###
 # Windows thumbnail cache files

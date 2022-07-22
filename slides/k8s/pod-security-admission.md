@@ -32,24 +32,26 @@
 
 ---
 
-## Pod Security Standards (each adds capabilities to the last)
+## Pod Security Standards: 3 modes
+
+Note: restricted->baseline->privileged: each adds more restrictions to the last
+
+- `privileged` (admin/easy mode)
+
+  - can do everything
+  - equivalent to not enabling PSS for a namespace
+
+- `baseline` (Disables uncommon things, or "host-affecting things")
+
+  - disables hostNetwork, hostPID, hostIPC, hostPorts, hostPath volumes
+  - limits which SELinux/AppArmor profiles can be used
+  - containers can still run as root and use most capabilities
 
 - `restricted` (hard mode. Make this the goal for all your apps)
 
   - limits volumes to configMap, emptyDir, ephemeral, secret, PVC
   - containers can't run as root, only capability is NET_BIND_SERVICE
   - includes `baseline` (can't do privileged pods, hostPath, hostNetwork...)
-
-- `baseline` (easier mode to start with)
-
-  - disables hostNetwork, hostPID, hostIPC, hostPorts, hostPath volumes
-  - limits which SELinux/AppArmor profiles can be used
-  - containers can still run as root and use most capabilities
-
-- `privileged` (admin mode)
-
-  - can do everything
-  - equivalent to not enabling PSS for a namespace
 
 ---
 
@@ -73,7 +75,7 @@
 
 - Step 2: label a Namespace for which of policy to warn, audit, and/or enforce
 
-- Step 3: provide an AdmissionConfiguration to set defaults and exemptions (optional)
+- Step 3: (optional) provide an AdmissionConfiguration to set defaults and exemptions
 
 - Step 4: profit!
 

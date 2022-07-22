@@ -1,6 +1,6 @@
 title: |
   Week 3 Part 2: 
-  Container Implementation and Workflows
+  K8s Security for Apps. Container Implementation and Workflows
 
 gitrepo: github.com/bretfisher/container.training
 
@@ -10,22 +10,35 @@ slides: https://chicago.bretfisher.com/
 
 exclude:
 - self-paced
+- extra-details
 
 content:
 - shared/title.md
-- logistics-bret-k8s.md
+- logistics-bret-security.md
 - shared/about-slides.md
 - shared/toc.md
-# - Todays_Agenda.md
 
 - # DAY 1
-  - containers/Training_Environment.md
-  
-
+  - chicago/sampleapp-simple.md
+  - chicago/dd4w-sec.md
+    ### k8s pod security
+  - k8s/pod-security-intro.md
+  - shared/brets-security-advice.md
+  - k8s/resource-limits-intro.md
+  - k8s/resource-limits.md
+  - k8s/k9s.md
+  - k8s/dashboard.md
+  - chicago/code-pr-workflow.md
+  - chicago/gitops-workflow.md
+  - chicago/next-project-steps.md
+  - chicago/thanks.md
 
 - # EXTRA
   - |
-    # (Extra Security content)
-  # k8s api security
+    # (Extra security and advanced content)
+  - k8s/pod-security-admission.md
+  - k8s/netpol.md
   - k8s/authn-authz.md
-
+  - k8s/operators.md
+  - k8s/gitlab.md
+  

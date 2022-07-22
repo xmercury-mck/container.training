@@ -1,4 +1,4 @@
-# Resource Limits
+# Resources in Linux
 
 - We can attach resource indications to our pods
 
@@ -158,7 +158,7 @@ For more details, check [this blog post](https://erickhun.com/posts/kubernetes-f
 
 - Exceeding the memory limit (even by a small amount) can reduce performance *a lot*
 
-- Kubernetes *does not support swap* (more on that later!)
+- Kubernetes *does not support swap* (Well, it's Alpha in 1.22+)
 
 - Exceeding the memory limit will cause the container to be killed
 
@@ -179,6 +179,14 @@ For more details, check [this blog post](https://erickhun.com/posts/kubernetes-f
   - the scheduler uses the requested sizes to determine placement
 
   - the resources requested by all pods on a node will never exceed the node size
+
+---
+
+class: pic
+
+## Requests vs. Limits
+
+![memory requests and limits](chicago/k8s-recs-ands-limits.png)
 
 ---
 
@@ -280,15 +288,18 @@ Each pod is assigned a QoS class (visible in `status.qosClass`).
 
   (corresponding to the virtual CPUs offered by some cloud providers)
 
-- CPU can be expressed with a decimal value, or even a "milli" suffix
+- CPU can be expressed with a decimal value, or even a "millicpu" suffix
 
-  (so 100m = 0.1)
+  - (100m = 0.1, or 10% of a vCPU)
+  - (2000m = 2, or 100% of 2 vCPUs)
 
 - Memory is expressed in bytes
 
 - Memory can be expressed with k, M, G, T, ki, Mi, Gi, Ti suffixes
 
-  (corresponding to 10^3, 10^6, 10^9, 10^12, 2^10, 2^20, 2^30, 2^40)
+  - (corresponding to 10^3, 10^6, 10^9, 10^12, 2^10, 2^20, 2^30, 2^40)
+  - (most common is Mi or Gi)
+  - (1Gi = 1GB, or 1,073,741,824 bytes)
 
 ---
 
@@ -303,10 +314,10 @@ containers:
   resources:
     limits:
       memory: "100Mi"
-      cpu: "100m"
+      cpu: "100m"  # 10% of a vCPU. Could also be "0.1"
     requests:
       memory: "100Mi"
-      cpu: "10m"
+      cpu: "10m"   # 1% of a vCPU. Could also be "0.01"
 ```
 
 This set of resources makes sure that this service won't be killed (as long as it stays below 100 MB of RAM), but allows its CPU usage to be throttled if necessary.

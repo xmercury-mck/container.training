@@ -28,15 +28,9 @@ content:
   # - containers/docker-engine-security.md
     ### capabilities, seccomp, SELinux, AppArmor
   - containers/linux-security-in-containers.md
-    ### k8s pod security
-  - k8s/pod-security-intro.md
-  - k8s/pod-security-admission.md
-  - k8s/resource-limits.md
   - shared/brets-security-advice.md
 
 - # EXTRA
   - |
     # (Extra security and advanced content)
-  - k8s/netpol.md
-  - k8s/authn-authz.md
   - containers/Namespaces_Cgroups.md

@@ -105,7 +105,7 @@ CMD ["python", "something.py"]
 
 - `docker top <container>` shows process, but wrong non-root user
   - That's because it's translating user IDs in container to host names
-  - It's been a bug for a [long time][1] 😢
+  - It's been a bug for a [long time] 😢
 
 --
 
@@ -113,7 +113,7 @@ CMD ["python", "something.py"]
 
 - *Let's demo in a NGINX container*
 
-[1]:https://github.com/moby/moby/issues/17719
+[long time]: https://github.com/moby/moby/issues/17719
 
 ---
 

@@ -140,6 +140,26 @@
 
 ---
 
+## Acronym salad for built-in features
+
+- PSP = Pod Security Policy (legacy)
+
+  - an admission plugin called PodSecurityPolicy
+
+  - a resource named PodSecurityPolicy (`apiVersion: policy/v1beta1`)
+
+- PSA = Pod Security Admission
+
+  - an admission controller called `PodSecurity`, enforcing PSS below
+
+  - the successor to the legacy PSP
+
+- PSS = Pod Security Standards
+
+  - a set of 3 policies (privileged, baseline, restricted)
+
+---
+
 ## Dynamic admission
 
 - Leverage ValidatingWebhookConfigurations
@@ -162,7 +182,7 @@
 
 ## My policy preferences for the real world
 
-- [Kyverno][1] (and their SaaS [Nirmata][2]) is the most mature and flexible solution
+- [Kyverno] (and their SaaS [Nirmata]) is the most mature and flexible solution
 
 - It's a CNCF incubating project, meaning it's ready for production, stable, and popular
 
@@ -172,34 +192,80 @@
 
 - Like all Admission Controllers, it's harder to troubleshoot when `apply` is automated
 
-- I had the founder demo it on my stream, checkout the [video][3] or [podcast][4]
+- I had the founder demo it on my stream, checkout [the video] or [podcast]
 
 - We should still probably know the basics of PSA, since thats built-in
 
-[1]:https://kyverno.io/policies/pod-security/
-[2]:https://nirmata.com/
-[3]:https://youtu.be/4uabd0GkqdY?t=357
-[4]:https://podcast.bretfisher.com/episodes/kubernetes-policy-management-with-kyverno-and-nirmata
+[Kyverno]:https://kyverno.io/policies/pod-security/
+[Nirmata]:https://nirmata.com/
+[the video]:https://youtu.be/4uabd0GkqdY?t=357
+[podcast]:https://podcast.bretfisher.com/episodes/kubernetes-policy-management-with-kyverno-and-nirmata
 
 ---
 
-## Acronym salad for built-in features
+## More on Kyverno
 
-- PSP = Pod Security Policy (legacy)
+- Security and Ops teams, seriously, [checkout Kyverno]
 
-  - an admission plugin called PodSecurityPolicy
+- It can do *lots* of things to place guard rails on your clusters (188+ policies)
 
-  - a resource named PodSecurityPolicy (`apiVersion: policy/v1beta1`)
+- This gives you more comfort in letting devs "just deploy to their namespace"
 
-- PSA = Pod Security Admission
+--
 
-  - an admission controller called `PodSecurity`, enforcing PSS below
+- A few of the many things it can do:
 
-  - the successor to the legacy PSP
+  - Require images in specific namespaces or the whole cluster to be *signed*!
+  - Implement and control PSS and PSA for you
+  - Prevent NodePort in services, so pods must use LoadBalancer or Ingress
+  - Prevent use of `latest` tag on images (which is not good in production)
 
-- PSS = Pod Security Standards
+--
 
-  - a set of 3 policies (privileged, baseline, restricted)
+- Dev's! usually your DevSecOps team will let you know the policies
+
+- All you need to do is write your pod spec properly to adhere to their standards
+
+- Here's an example...
+  
+[checkout Kyverno]:https://kyverno.io
+
+---
+
+## Good default pod spec for workloads
+
+.small[
+```yaml
+spec:
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault   # enable seccomp default profile
+    runAsUser: 1000          # hardcode user to non-root if not set in Dockerfile
+    runAsGroup: 1000         # hardcode group to non-root if not set in Dockerfile
+    runAsNonRoot: true       # hardcode to non-root. Redundant to above if Dockerfile is set USER 1000
+  containers:
+    - name: my-container-name
+      image: my-image:tag
+      ports:
+        - containerPort: 80  # hardcode the listening port if Dockerfile isn't set
+          protocol: TCP
+      securityContext:
+        allowPrivilegeEscalation: false # prevent sudo, etc.
+        privileged: false    # prevent acting like host root
+      readinessProbe:
+        httpGet:             # Lots of timeout values with defaults, be sure they are ideal for your workload
+          path: /ready
+          port: 80
+      resources:             # Because limits = requests, QoS is set to "Guaranteed"
+        limits:
+          memory: "500Mi"    # If container uses over 500MB it is killed (OOM)
+          cpu: "1"           # If container uses over 1 vCPU it is throttled
+        requests:
+          memory: "500Mi"    # Scheduler finds a node where 500MB is available
+          cpu: "1"           # Scheduler finds a node where 1 vCPU is available
+
+```
+]
 
 ???
 

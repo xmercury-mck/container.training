@@ -163,13 +163,13 @@ are a few tools that can help us.*
 
 - Docker Desktop
 
-- Draft
+- Minikube, Rancher Desktop (free DD replacements)
 
-- Minikube
+- Oktetao (local code, remote K8s, SaaS or your own servers)
 
-- Skaffold
+- Skaffold (local code, remote K8s, your own servers)
 
-- Tilt
+- Tilt (now part of Docker Inc.)
 
 - ...
 

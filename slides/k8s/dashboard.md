@@ -73,7 +73,7 @@
 
 - Check which port the dashboard is on:
   ```bash
-  kubectl get svc dashboard
+  kubectl get svc kubernetes-dashboard -n kubernetes-dashboard
   ```
 
 ]

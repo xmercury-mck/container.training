@@ -115,23 +115,24 @@
 
 - Click any image tag in a Docker Hub official image page to see the Dockerfile
 
-- [hub.docker.com/_/python](https://hub.docker.com/_/python) is built on top of other images:
+- [hub.docker.com/_/python] is built on top of other images:
 
-1. `python:latest` (920MB) is built from its [Dockerfile][1] in the Docker Hub repo README
+1. `python:latest` (920MB) is [built from its Dockerfile] in the Docker Hub repo README
 2. That Dockerfile has `FROM buildpack-deps:bullseye` as its base image
-3. `buildpack-deps:bullseye` (834MB) [Dockerfile installs a bunch][2] of packages
+3. `buildpack-deps:bullseye` (834MB) [Dockerfile installs a bunch] of packages
 4. That Dockerfile has `FROM buildpack-deps:bullseye-scm` as its base image
-5. `buildpack-deps:bullseye-scm` (306MB) [Dockerfile installs versioning tools][3]
+5. `buildpack-deps:bullseye-scm` (306MB) [Dockerfile installs versioning tools]
 6. That Dockerfile has `FROM buildpack-deps:bullseye-curl` as its base image
-7. `FROM buildpack-deps:bullseye-curl` (154MB) [Dockerfile installs curl, wget and others][4]
+7. `FROM buildpack-deps:bullseye-curl` (154MB) [Dockerfile installs curl, wget and others]
 8. That Dockerfile has `FROM debian:bullseye` as its base image
-9. `debian:bullseye` (118MB) is a [simple 3-line Dockerfile][5] that has minimal Debian
+9. `debian:bullseye` (118MB) is a [simple 3-line Dockerfile] that has minimal Debian
 
-[1]:https://github.com/docker-library/python/blob/56cea612ab370f3d05b29e97466d418a0f07e463/3.10/bullseye/Dockerfile
-[2]:https://github.com/docker-library/buildpack-deps/blob/65d69325ad741cea6dee20781c1faaab2e003d87/debian/bullseye/Dockerfile
-[3]:https://github.com/docker-library/buildpack-deps/blob/65d69325ad741cea6dee20781c1faaab2e003d87/debian/bullseye/scm/Dockerfile
-[4]:https://github.com/docker-library/buildpack-deps/blob/98a5ab81d47a106c458cdf90733df0ee8beea06c/debian/bullseye/curl/Dockerfile
-[5]:https://github.com/debuerreotype/docker-debian-artifacts/blob/6251ccd8060ae10b12bd881975cf37eee84ffbb0/bullseye/Dockerfile
+[hub.docker.com/_/python]: https://hub.docker.com/_/python
+[built from its Dockerfile]: https://github.com/docker-library/python/blob/56cea612ab370f3d05b29e97466d418a0f07e463/3.10/bullseye/Dockerfile
+[Dockerfile installs a bunch]: https://github.com/docker-library/buildpack-deps/blob/65d69325ad741cea6dee20781c1faaab2e003d87/debian/bullseye/Dockerfile
+[Dockerfile installs versioning tools]: https://github.com/docker-library/buildpack-deps/blob/65d69325ad741cea6dee20781c1faaab2e003d87/debian/bullseye/scm/Dockerfile
+[Dockerfile installs curl, wget and others]: https://github.com/docker-library/buildpack-deps/blob/98a5ab81d47a106c458cdf90733df0ee8beea06c/debian/bullseye/curl/Dockerfile
+[simple 3-line Dockerfile]: https://github.com/debuerreotype/docker-debian-artifacts/blob/6251ccd8060ae10b12bd881975cf37eee84ffbb0/bullseye/Dockerfile
 
 ---
 
@@ -246,13 +247,13 @@ CMD ["python", "something.py"]
 
 - It focuses a lot on base images, custom base images, multi-stage images, and more
 
-- [27min YouTube video][1]
+- [27min YouTube video]
   
-- [GitHub Repo][2] with tons of examples and documentation
+- [GitHub Repo with tons] of examples and documentation
 
 - 95% of it is directly transferable to Python, PHP, Ruby, etc.
 
 - 75% of it is transferable to any other language image
 
-[1]:https://www.youtube.com/watch?v=Z0lpNSC1KbM
-[2]:https://github.com/BretFisher/nodejs-rocks-in-docker
+[27min YouTube video]:https://www.youtube.com/watch?v=Z0lpNSC1KbM
+[GitHub Repo with tons]:https://github.com/BretFisher/nodejs-rocks-in-docker
