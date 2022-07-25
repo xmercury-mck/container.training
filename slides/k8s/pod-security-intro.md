@@ -247,7 +247,7 @@ spec:
     - name: my-container-name
       image: my-image:tag
       ports:
-        - containerPort: 80  # hardcode the listening port if Dockerfile isn't set
+        - containerPort: 8080 # hardcode the listening port if Dockerfile isn't set wit EXPOSE
           protocol: TCP
       securityContext:
         allowPrivilegeEscalation: false # prevent sudo, etc.
@@ -255,11 +255,11 @@ spec:
       readinessProbe:
         httpGet:             # Lots of timeout values with defaults, be sure they are ideal for your workload
           path: /ready
-          port: 80
+          port: 8080
       resources:             # Because limits = requests, QoS is set to "Guaranteed"
         limits:
           memory: "500Mi"    # If container uses over 500MB it is killed (OOM)
-          cpu: "1"           # If container uses over 1 vCPU it is throttled
+          cpu: "2"           # If container uses over 2 vCPU it is throttled
         requests:
           memory: "500Mi"    # Scheduler finds a node where 500MB is available
           cpu: "1"           # Scheduler finds a node where 1 vCPU is available

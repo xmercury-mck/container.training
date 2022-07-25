@@ -64,7 +64,7 @@
 
 - We can use `kubectl explain` to see resource definitions:
   ```bash
-  kubectl explain -r pod.spec
+  kubectl explain --recursive pod.spec
   ```
 
 - Not the easiest option!

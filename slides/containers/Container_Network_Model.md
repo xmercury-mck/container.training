@@ -405,7 +405,7 @@ class: extra-details
 Let's try DNS resolution first, using the `nslookup` tool that ships with the `alpine` image.
 
 ```bash
-$ docker run --net prod --rm alpine nslookup es
+$ docker run --net prod --rm alpine nslookup es.
 Name:      es
 Address 1: 172.23.0.3 prod-es-2.prod
 Address 2: 172.23.0.2 prod-es-1.prod
