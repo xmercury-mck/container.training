@@ -256,31 +256,14 @@ _cmd_docker() {
       sudo mkdir -p /mnt/docker
       sudo ln -sfn /mnt/docker /var/lib/docker
     fi
-    "
 
-    pssh -i "
-    set -e
     # This will install the latest Docker.
     sudo apt-get -qy install apt-transport-https ca-certificates curl software-properties-common
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     sudo add-apt-repository 'deb https://download.docker.com/linux/ubuntu focal stable'
     sudo apt-get -q update
     sudo apt-get -qy install docker-ce
-    "
 
-    # pssh -i "
-    # set -e
-    # curl -fsSL get.docker.com -o get-docker.sh && sudo sh get-docker.sh
-    # "
-
-    # # set buildx as default builder. uninstall with docker buildx uninstall. avoid with DOCKER_BUILDKIT=0
-    # pssh -i "
-    # set -e
-    # sudo docker buildx install
-    # "
-
-    pssh "
-    set -e
     # Add registry mirror configuration.
     if ! [ -f /etc/docker/daemon.json ]; then
         echo '{\"registry-mirrors\": [\"https://mirror.gcr.io\"]}' | sudo tee /etc/docker/daemon.json
