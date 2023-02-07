@@ -1,20 +1,20 @@
 ## Prep: Things to do before we get started.
 
-1. Open these slides: https://chicago.bretfisher.com/
+1. Open these slides: https://tampa.bretfisher.com/
 
 1. Get a server: I provisioned one for each. Teams has a spreadsheet of IPs. Pick one, copy the IP and add your initials.
 
-1. Access your server over SSH (likely blocked) or WebSSH (http://w.x.y.z:8080)
+2. Access your server over SSH or WebSSH (http://w.x.y.z:8080)
 
    - username: docker  |  password: training
 
-1. Let me know if you can't get in, we have multiple backup options!
+3. Let me know if you can't get in, we have multiple backup options!
 
 **Note**
 
 - This is hands on. You'll want to do most of these commands with me.
 
-- Everything is take home (except for the server 😉). We'll get to that later.
+- These slides are take-home.
 
 - There's also homework (if you want to solidify your skills).
 
@@ -26,19 +26,19 @@
 
 - I'm a [DevOps Consultant+Trainer], [Open Source maintainer], and [Docker Captain].
 
-- I have a weekly [DevOps live stream] with guests. Join us on Thursdays!
+- I have a weekly [cloud native DevOps live show] with guests. Join us on Thursdays!
 
 - That show turns into a podcast called "[DevOps and Docker Talk]."
 
-- You can get my weekly updates in email by following [my Patreon page].
+- You can get my weekly updates in my [Newsletter].
 
 [@bretfisher]: https://twitter.com/bretfisher
 [DevOps Consultant+Trainer]: https://www.bretfisher.com/courses/
 [Open Source maintainer]: https://github.com/bretfisher
 [Docker Captain]: https://www.docker.com/captains/bret-fisher/
-[DevOps live stream]: https://www.youtube.com/channel/UC0NErq0RhP51iXx64ZmyVfg
+[cloud native DevOps live show]: https://www.youtube.com/@BretFisher
 [DevOps and Docker Talk]: https://podcast.bretfisher.com/
-[my Patreon page]: https://patreon.com/BretFisher
+[Newsletter]: https://bret.news
 
 ---
 

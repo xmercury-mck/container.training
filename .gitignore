@@ -27,3 +27,6 @@ node_modules
 Thumbs.db
 ehthumbs.db
 ehthumbs_vista.db
+
+# Local Netlify folder
+.netlify

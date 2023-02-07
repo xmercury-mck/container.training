@@ -261,20 +261,20 @@ _cmd_docker() {
     # This will install the latest Docker.
     sudo apt-get -qy install apt-transport-https ca-certificates curl software-properties-common
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    sudo add-apt-repository 'deb https://download.docker.com/linux/ubuntu bionic stable'
+    sudo add-apt-repository 'deb https://download.docker.com/linux/ubuntu focal stable'
     sudo apt-get -q update
     sudo apt-get -qy install docker-ce
 
-    pssh -i "
-    set -e
-    curl -fsSL get.docker.com -o get-docker.sh && sudo sh get-docker.sh
-    "
+    # pssh -i "
+    # set -e
+    # curl -fsSL get.docker.com -o get-docker.sh && sudo sh get-docker.sh
+    # "
 
-    # set buildx as default builder. uninstall with docker buildx uninstall. avoid with DOCKER_BUILDKIT=0
-    pssh -i "
-    set -e
-    sudo docker buildx install
-    "
+    # # set buildx as default builder. uninstall with docker buildx uninstall. avoid with DOCKER_BUILDKIT=0
+    # pssh -i "
+    # set -e
+    # sudo docker buildx install
+    # "
 
     pssh "
     set -e
@@ -286,7 +286,7 @@ _cmd_docker() {
     "
 
     ##VERSION## https://github.com/docker/compose/releases
-    COMPOSE_VERSION=v2.11.1
+    COMPOSE_VERSION=v2.15.1
     COMPOSE_PLATFORM='linux-$(uname -m)'
     
     # Just in case you need Compose 1.X, you can use the following lines.

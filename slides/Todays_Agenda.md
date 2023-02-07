@@ -18,7 +18,7 @@
 
 - Their original 2013 ideas are now an industry standard called [OCI](https://opencontainers.org/).
 
-- Those standards are now used by hundreds of tools the [Cloud Native](https://www.cncf.io/) computing.
+- Those standards are now used by hundreds of tools in the [Cloud Native](https://www.cncf.io/) computing.
 
 --
 
