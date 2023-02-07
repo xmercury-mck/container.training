@@ -258,12 +258,15 @@ _cmd_docker() {
     fi
     "
 
+    pssh -i "
+    set -e
     # This will install the latest Docker.
     sudo apt-get -qy install apt-transport-https ca-certificates curl software-properties-common
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     sudo add-apt-repository 'deb https://download.docker.com/linux/ubuntu focal stable'
     sudo apt-get -q update
     sudo apt-get -qy install docker-ce
+    "
 
     # pssh -i "
     # set -e
