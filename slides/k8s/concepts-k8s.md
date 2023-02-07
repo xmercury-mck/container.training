@@ -286,6 +286,10 @@ class: extra-details
 
 ## Do we need to run Docker at all?
 
+- On our Kubernetes clusters:
+
+  *Not anymore*
+
 - On our development environments, CI pipelines ... :
 
   *Yes, almost certainly*

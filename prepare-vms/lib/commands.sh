@@ -130,6 +130,8 @@ set nowrap
 SQRL
 
     pssh -I "sudo -u $USER_LOGIN tee /home/$USER_LOGIN/.tmux.conf" <<SQRL
+set -g status-style bg=yellow,bold
+
 bind h select-pane -L
 bind j select-pane -D
 bind k select-pane -U
@@ -156,6 +158,9 @@ _cmd_clusterize() {
     TAG=$1
     need_tag
 
+    # Disable unattended upgrades so that they don't mess up with the subsequent steps
+    pssh sudo rm -f /etc/apt/apt.conf.d/50unattended-upgrades
+
     # Special case for scaleway since it doesn't come with sudo
     if [ "$INFRACLASS" = "scaleway" ]; then
         pssh -l root "
@@ -181,7 +186,21 @@ _cmd_clusterize() {
     pssh "
     if [ -f /etc/iptables/rules.v4 ]; then
         sudo sed -i 's/-A INPUT -j REJECT --reject-with icmp-host-prohibited//' /etc/iptables/rules.v4
+        sudo netfilter-persistent flush
         sudo netfilter-persistent start
+    fi"
+
+    # oracle-cloud-agent upgrades pacakges in the background.
+    # This breaks our deployment scripts, because when we invoke apt-get, it complains
+    # that the lock already exists (symptom: random "Exited with error code 100").
+    # Workaround: if we detect oracle-cloud-agent, remove it.
+    # But this agent seems to also take care of installing/upgrading
+    # the unified-monitoring-agent package, so when we stop the snap,
+    # it can leave dpkg in a broken state. We "fix" it with the 2nd command.
+    pssh "
+    if [ -d /snap/oracle-cloud-agent ]; then
+        sudo snap remove oracle-cloud-agent
+        sudo dpkg --remove --force-remove-reinstreq unified-monitoring-agent
     fi"
 
     # Copy settings and install Python YAML parser
@@ -239,26 +258,12 @@ _cmd_docker() {
     fi
     "
 
-    # This will install the latest Docker and Compose plugin.
-    # pssh -i "
-    # set -e
-    # sudo apt-get -qy install apt-transport-https ca-certificates curl software-properties-common gnupg lsb-release
-    # if ! [ -f /etc/apt/keyrings/docker.gpg ]; then
-    #     sudo mkdir -p /etc/apt/keyrings
-    #     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-    # fi
-    # if ! [ -f /etc/apt/sources.list.d/docker.list ]; then
-    #     export RELEASE=\$(lsb_release -cs)
-    #     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-    #       $RELEASE stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    # fi
-    # sudo apt-get -q update
-    # "
-
-    # pssh -i "
-    # set -e
-    # sudo apt-get -qy install docker-ce docker-ce-cli containerd.io docker-compose-plugin
-    # "
+    # This will install the latest Docker.
+    sudo apt-get -qy install apt-transport-https ca-certificates curl software-properties-common
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo add-apt-repository 'deb https://download.docker.com/linux/ubuntu bionic stable'
+    sudo apt-get -q update
+    sudo apt-get -qy install docker-ce
 
     pssh -i "
     set -e
@@ -280,6 +285,31 @@ _cmd_docker() {
     fi
     "
 
+    ##VERSION## https://github.com/docker/compose/releases
+    COMPOSE_VERSION=v2.11.1
+    COMPOSE_PLATFORM='linux-$(uname -m)'
+    
+    # Just in case you need Compose 1.X, you can use the following lines.
+    # (But it will probably only work for x86_64 machines.)
+    #COMPOSE_VERSION=1.29.2
+    #COMPOSE_PLATFORM='Linux-$(uname -m)'
+
+    pssh "
+    set -e
+    ### Install docker-compose.
+    sudo curl -fsSL -o /usr/local/bin/docker-compose \
+      https://github.com/docker/compose/releases/download/$COMPOSE_VERSION/docker-compose-$COMPOSE_PLATFORM
+    sudo chmod +x /usr/local/bin/docker-compose
+    docker-compose version
+
+    ### Install docker-machine.
+    ##VERSION## https://github.com/docker/machine/releases
+    MACHINE_VERSION=v0.16.2
+    sudo curl -fsSL -o /usr/local/bin/docker-machine \
+      https://github.com/docker/machine/releases/download/\$MACHINE_VERSION/docker-machine-\$(uname -s)-\$(uname -m)
+    sudo chmod +x /usr/local/bin/docker-machine
+    docker-machine version
+    "
 }
 
 _cmd kubebins "Install Kubernetes and CNI binaries but don't start anything"
@@ -341,7 +371,8 @@ EOF"
     pssh --timeout 200 -i "
     sudo apt-get update -q &&
     sudo apt-get install -qy kubelet kubeadm kubectl &&
-    sudo apt-mark hold kubelet kubeadm kubectl
+    sudo apt-mark hold kubelet kubeadm kubectl &&
+    kubeadm completion bash | sudo tee /etc/bash_completion.d/kubeadm &&
     kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl &&
     echo 'alias k=kubectl' | sudo tee /etc/bash_completion.d/k &&
     echo 'complete -F __start_kubectl k' | sudo tee -a /etc/bash_completion.d/k"
@@ -415,8 +446,9 @@ EOF
     # Install weave as the pod network
     pssh -i "
     if i_am_first_node; then
-        kubever=\$(kubectl version | base64 | tr -d '\n') &&
-        kubectl apply -f https://cloud.weave.works/k8s/net?k8s-version=\$kubever
+        #kubever=\$(kubectl version | base64 | tr -d '\n') &&
+        #kubectl apply -f https://cloud.weave.works/k8s/net?k8s-version=\$kubever
+        kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s-1.11.yaml
     fi"
 
     # Join the other nodes to the cluster
@@ -474,12 +506,13 @@ _cmd_kubetools() {
     # Install kube-ps1
     pssh "
     set -e
-    if ! [ -f /etc/profile.d/kube-ps1.sh ]; then
+    if ! [ -d /opt/kube-ps1 ]; then
       cd /tmp
       git clone https://github.com/jonmosco/kube-ps1
-      sudo cp kube-ps1/kube-ps1.sh /etc/profile.d/kube-ps1.sh
+      sudo mv kube-ps1 /opt/kube-ps1
       sudo -u $USER_LOGIN sed -i s/docker-prompt/kube_ps1/ /home/$USER_LOGIN/.bashrc &&
       sudo -u $USER_LOGIN tee -a /home/$USER_LOGIN/.bashrc <<EOF
+. /opt/kube-ps1/kube-ps1.sh
 KUBE_PS1_PREFIX=""
 KUBE_PS1_SUFFIX=""
 KUBE_PS1_SYMBOL_ENABLE="false"
@@ -490,7 +523,7 @@ EOF
 
     # Install stern
     ##VERSION## https://github.com/stern/stern/releases
-    STERN_VERSION=1.21.0
+    STERN_VERSION=1.22.0
     FILENAME=stern_${STERN_VERSION}_linux_${ARCH}
     URL=https://github.com/stern/stern/releases/download/v$STERN_VERSION/$FILENAME.tar.gz
     pssh "
@@ -512,7 +545,7 @@ EOF
 
     # Install kustomize
     ##VERSION## https://github.com/kubernetes-sigs/kustomize/releases
-    KUSTOMIZE_VERSION=v4.4.0
+    KUSTOMIZE_VERSION=v4.5.7
     URL=https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_${ARCH}.tar.gz
     pssh "
     if [ ! -x /usr/local/bin/kustomize ]; then
@@ -531,7 +564,7 @@ EOF
     if [ ! -x /usr/local/bin/ship ]; then
         ##VERSION##
         curl -fsSL https://github.com/replicatedhq/ship/releases/download/v0.51.3/ship_0.51.3_linux_$ARCH.tar.gz |
-             sudo tar -C /usr/local/bin -zx ship
+            sudo tar -C /usr/local/bin -zx ship
     fi"
 
     # Install the AWS IAM authenticator
@@ -539,8 +572,8 @@ EOF
     if [ ! -x /usr/local/bin/aws-iam-authenticator ]; then
         ##VERSION##
         sudo curl -fsSLo /usr/local/bin/aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.12.7/2019-03-27/bin/linux/$ARCH/aws-iam-authenticator
-	sudo chmod +x /usr/local/bin/aws-iam-authenticator
-    aws-iam-authenticator version
+	      sudo chmod +x /usr/local/bin/aws-iam-authenticator
+        aws-iam-authenticator version
     fi"
 
     # Install the krew package manager
@@ -582,6 +615,7 @@ EOF
         FILENAME=tilt.\$TILT_VERSION.linux.$TILT_ARCH.tar.gz
         curl -fsSL https://github.com/tilt-dev/tilt/releases/download/v\$TILT_VERSION/\$FILENAME |
         sudo tar -zxvf- -C /usr/local/bin tilt
+        tilt completion bash | sudo tee /etc/bash_completion.d/tilt
         tilt version
     fi"
 
@@ -590,6 +624,7 @@ EOF
     if [ ! -x /usr/local/bin/skaffold ]; then
         curl -fsSLo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-$ARCH &&
         sudo install skaffold /usr/local/bin/
+        skaffold completion bash | sudo tee /etc/bash_completion.d/skaffold
         skaffold version
     fi"
 
@@ -598,7 +633,26 @@ EOF
     if [ ! -x /usr/local/bin/kompose ]; then
         curl -fsSLo kompose https://github.com/kubernetes/kompose/releases/latest/download/kompose-linux-$ARCH &&
         sudo install kompose /usr/local/bin
+        kompose completion bash | sudo tee /etc/bash_completion.d/kompose
         kompose version
+    fi"
+
+    # Install KinD
+    pssh "
+    if [ ! -x /usr/local/bin/kind ]; then
+        curl -fsSLo kind https://github.com/kubernetes-sigs/kind/releases/latest/download/kind-linux-$ARCH &&
+        sudo install kind /usr/local/bin
+        kind completion bash | sudo tee /etc/bash_completion.d/kind
+        kind version
+    fi"
+
+    # Install YTT
+    pssh "
+    if [ ! -x /usr/local/bin/ytt ]; then
+        curl -fsSLo ytt https://github.com/vmware-tanzu/carvel-ytt/releases/latest/download/ytt-linux-$ARCH &&
+        sudo install ytt /usr/local/bin
+        ytt completion bash | sudo tee /etc/bash_completion.d/ytt
+        ytt version
     fi"
 
     ##VERSION## https://github.com/bitnami-labs/sealed-secrets/releases
