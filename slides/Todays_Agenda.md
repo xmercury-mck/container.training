@@ -1,13 +1,3 @@
-## This week we're learning container basics
-
-- Docker, Compose, container networking, container internals, etc.
-
-- These container fundamentals are critical for all other tooling.
-
-- e.g. Kubernetes runs these containers across many servers.
-
----
-
 ## What *is* Docker, the idea?
 
 - Docker Inc makes many tools to build, deploy, and run containers.

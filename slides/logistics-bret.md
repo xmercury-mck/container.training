@@ -2,13 +2,13 @@
 
 1. Open these slides: https://tampa.bretfisher.com/
 
-1. Get a server: I provisioned one for each. Teams has a spreadsheet of IPs. Pick one, copy the IP and add your initials.
+2. Get a server: I provisioned one for each. Ask me for the IPs.
 
-2. Access your server over SSH or WebSSH (http://w.x.y.z:8080)
+3. Access your server over SSH `ssh docker@w.x.y.z` or WebSSH (http://w.x.y.z:8080)
 
    - username: docker  |  password: training
 
-3. Let me know if you can't get in, we have multiple backup options!
+4. Let me know if you can't get in, we have multiple backup options!
 
 **Note**
 
@@ -16,15 +16,13 @@
 
 - These slides are take-home.
 
-- There's also homework (if you want to solidify your skills).
-
 ---
 
 ## Introductions
 
 - Hello! I'm Bret Fisher ([@bretfisher]), a fan of 🐳 🏖 🥃 👾 ✈️ 🐶
 
-- I'm a [DevOps Consultant+Trainer], [Open Source maintainer], and [Docker Captain].
+- I'm a [DevOps Consultant+Trainer] (300k students), [OSS maintainer], and [Docker Captain].
 
 - I have a weekly [cloud native DevOps live show] with guests. Join us on Thursdays!
 
@@ -34,50 +32,9 @@
 
 [@bretfisher]: https://twitter.com/bretfisher
 [DevOps Consultant+Trainer]: https://www.bretfisher.com/courses/
-[Open Source maintainer]: https://github.com/bretfisher
+[OSS maintainer]: https://github.com/bretfisher
 [Docker Captain]: https://www.docker.com/captains/bret-fisher/
 [cloud native DevOps live show]: https://www.youtube.com/@BretFisher
 [DevOps and Docker Talk]: https://podcast.bretfisher.com/
 [Newsletter]: https://bret.news
 
----
-
-## Logistics
-
-- The training will run for 3 hours each day, with Q&A before and after.
-
-- We'll do a short half-time break.
-
-- Feel free to interrupt for questions at any time on voice or Teams chat.
-
-- *Especially when you see full screen container pictures!*
-
----
-
-## Exercises
-
-- At the end of each day, there is an exercise.
-
-- To make the most out of the training, please try the exercises!
-
-  (it will help to practice and memorize the content of the day)
-
-- We recommend to take at least one hour to work on the exercises.
-
-  (if you understood the content of the day, it will be much faster)
-
-- Each day will start with a quick review of the exercises of the previous day.
-
----
-
-## Limited time signup for my video courses
-
-- I make bestselling Docker & Kubernetes courses on Udemy (nearly 300,000 students).
-
-- **As part of this workshop, you get free lifetime access to all of them!**
-
-- **But you must "buy" each course with the coupon before the coupon expires.**
-
-- Use the coupon code `CHICAGO22` to get the courses [in this list](https://www.udemy.com/user/bretfisher/).
-
-- Details will be emailed out to you as a reminder at the end of this workshop.

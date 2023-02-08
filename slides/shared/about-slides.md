@@ -60,19 +60,9 @@
 
 ## These slides are constantly updated
 
-- Feel free to check the GitHub repository for updates:
+- https://container.training
 
-  https://@@GITREPO@@
-
-- Look for branches named YYYY-MM-...
-
-- You can also find specific decks and other resources on:
-
-<!--
-.lab[
-```open https://@@GITREPO@@/tree/main/slides/common/about-slides.md```
-]
--->
+- Upstream repo https://github.com/jpetazzo/container.training
 
 ---
 
