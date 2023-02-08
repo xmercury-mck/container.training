@@ -24,11 +24,13 @@
 
 - I'm a [DevOps Consultant+Trainer] (300k students), [OSS maintainer], and [Docker Captain].
 
-- I have a weekly [cloud native DevOps live show] with guests. Join us on Thursdays!
+- 👉 Watch: My weekly [cloud native DevOps live show] with guests. Join us on Thursdays!
 
-- That show turns into a podcast called "[DevOps and Docker Talk]."
+- 👉 Listen: That show turns into a podcast called "[DevOps and Docker Talk]."
 
-- You can get my weekly updates in my [Newsletter].
+- 👉 Read: You can get my weekly updates in my [Newsletter].
+
+- 👉 Chat: Join 12k DevOps pros in my Discord server [devops.fan]
 
 [@bretfisher]: https://twitter.com/bretfisher
 [DevOps Consultant+Trainer]: https://www.bretfisher.com/courses/
@@ -37,4 +39,4 @@
 [cloud native DevOps live show]: https://www.youtube.com/@BretFisher
 [DevOps and Docker Talk]: https://podcast.bretfisher.com/
 [Newsletter]: https://bret.news
-
+[devops.fan]: https://devops.fan
