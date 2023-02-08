@@ -100,3 +100,13 @@
 --
 
 - `dockerd` or `podman` = best for humans locally. `containerd` or `cri-o` = best for K8s.
+
+---
+
+## Did you know Docker has its own Orchestration?
+
+- Docker Swarm "mode" is still a thing
+
+- And might be [having a renaissance](https://twitter.com/adamhjk/status/1622613733192204288?s=46&t=BAEQugmPKcJYp4RHn_OeCA)
+
+- (I have a [course on that too!](https://bret.courses))
